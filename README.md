@@ -52,9 +52,9 @@ mu_all <- eta <- matrix(nrow = n, ncol = q)
 for (j in 1:(q - 1)) {
   eta[, j] <- exp(X %*% betas[, j])
 }
-mu_all[, q] <- eta[, j] / (1 + rowSums(eta[, -q]))
+mu_all[, q] <- 1 / (1 + rowSums(eta[, -q]))
 for (j in 1:(q - 1)) {
-  mu_all[, j] <- 1 / (1 + rowSums(eta[, -q]))
+  mu_all[, j] <- eta[, j] / (1 + rowSums(eta[, -q]))
 }
 
 # simulate covariates Z linked to DM's dispersion
@@ -77,11 +77,11 @@ head(Y)
 ```
 
 ```
-##     [,1] [,2] [,3]
-##[1,]   66   17   17
-##[2,]   41   16   43
-##[3,]   35   14   51
-##[4,]   22    4   74
-##[5,]    0  100    0
-##[6,]   21    3   76
+##      [,1] [,2] [,3]
+## [1,]    8   12   80
+## [2,]    5   71   24
+## [3,]    0   93    7
+## [4,]    1   89   10
+## [5,]  100    0    0
+## [6,]   18   27   55
 ```
