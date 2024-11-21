@@ -9,7 +9,7 @@ This is a repository for the work on Dirichlet-Multinomial models.
 ```r
 rm(list=ls())
 # Load the function to simulate Dirichlet-Multinomial distributed data
-source("https://github.com/zhizuio/DirichletMultinomial/blob/main/R/simDM.R")
+source("R/simDM.R")
 
 #================================
 # Simulate data without covariates
@@ -28,12 +28,12 @@ We can simualte Dirichlet-Multinomial distributed responses with their mean mode
 
 $$
 \begin{aligned}
-    \bm y_{i \cdot} | \bm\mu,\phi  \sim \mathcal{DM}(\bm\mu,\phi ) 
+    \boldsymbol y_{i \cdot} | \boldsymbol\mu,\phi  \sim \mathcal{DM}(\boldsymbol\mu,\phi ) 
     &= \binom{m}{(y_{i1},...,y_{iq})} \frac{\prod_{j=1}^q\prod_{k=1}^{y_{ik}}\{\mu_j(1-\phi) + (k-1)\phi\}}{\prod_{k=1}^{m_{i}} \{1-\phi + (k-1)\phi\}}, \\
     %
-    g_\mu (\mu_{ic}) &= \mathbf X_i \bm\beta_c, \\
+    g_\mu (\mu_{ic}) &= \mathbf X_i \boldsymbol\beta_c, \\
     %
-    g_\phi (\phi_{i}) &= \mathbf Z_i \bm\gamma, 
+    g_\phi (\phi_{i}) &= \mathbf Z_i \boldsymbol\gamma, 
 \end{aligned}
 $$
 
