@@ -29,9 +29,9 @@ We can simualte Dirichlet-Multinomial distributed responses with their mean mode
 $$
 \begin{aligned}
     \boldsymbol y_{i \cdot} | \boldsymbol\mu,\phi  \sim \mathcal{DM}(\boldsymbol\mu,\phi ) 
-    &= \binom{m}{(y_{i1},...,y_{iq})} \frac{\prod_{j=1}^q\prod_{k=1}^{y_{ik}}\{\mu_j(1-\phi) + (k-1)\phi\}}{\prod_{k=1}^{m_{i}} \{1-\phi + (k-1)\phi\}}, \\
+    &= \binom{m}{(y_{i1},...,y_{iq})} \frac{\prod_{j=1}^q\prod_{k=1}^{y_{ik}}[\mu_j(1-\phi) + (k-1)\phi]}{\prod_{k=1}^m [1-\phi + (k-1)\phi]}, \\
     %
-    g_\mu (\mu_{ic}) &= \mathbf X_i \boldsymbol\beta_c, \\
+    g_\mu (\mu_{ij}) &= \mathbf X_i \boldsymbol\beta_j, \\
     %
     g_\phi (\phi_{i}) &= \mathbf Z_i \boldsymbol\gamma, 
 \end{aligned}
