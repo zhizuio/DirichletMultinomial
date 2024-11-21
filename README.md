@@ -59,13 +59,15 @@ for (j in 1:(q - 1)) {
 
 # simulate covariates Z linked to DM's dispersion
 set.seed(123)
-Z <- matrix(rnorm(n * p), nrow = n, ncol = p)
+p <- 1
+#Z <- matrix(rnorm(n * p), nrow = n, ncol = p)
+Z <- matrix(rbinom(100,0:1,prob=c(0.5, 0.5)), nrow = n) # With 0/1 binary Z, cloglog-link results in reasonable phi
 gammas <- runif(p, -1, 1)
-phi_all <- exp(Z %*% gammas) ## log link
-phi_all[phi_all > 1] <- 0.9
+#phi_all <- exp(Z %*% gammas) ## log link
+#phi_all[phi_all > 1] <- 0.9
 
-# phi_all <- 1 - exp(-exp( Z %*% gammas )) ## clog-log link
-# phi_all[phi_all > 0.8] <- 0.8 + runif(sum(phi_all > 0.8), -0.1, 0.1) # It's better to be smaller
+phi_all <- 1 - exp(-exp( Z %*% gammas )) ## clog-log link
+## phi_all[phi_all > 0.8] <- 0.8 + runif(sum(phi_all > 0.8), -0.1, 0.1) # It's better to be smaller
 
 # simulate outcomes Y
 Y <- matrix(nrow = n, ncol = q)
@@ -77,11 +79,11 @@ head(Y)
 ```
 
 ```
-##      [,1] [,2] [,3]
-## [1,]    8   12   80
-## [2,]    5   71   24
-## [3,]    0   93    7
-## [4,]    1   89   10
-## [5,]  100    0    0
-## [6,]   18   27   55
+     [,1] [,2] [,3]
+## [1,]    0    0  100
+## [2,]    0   26   74
+## [3,]    0   68   32
+## [4,]    2   30   68
+## [5,]    4   51   45
+## [6,]    0    1   99
 ```
