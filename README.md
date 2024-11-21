@@ -37,7 +37,7 @@ $$
 \end{aligned}
 $$
 
-where $g_\mu(\cdot)$ and $g_\psi(\cdot)$ are logistic and log link functions, respectively.
+where $g_\mu(\cdot)$ and $g_\phi(\cdot)$ are logistic and log link functions, respectively.
 
 ```r
 set.seed(123)
