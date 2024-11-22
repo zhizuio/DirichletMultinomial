@@ -15,17 +15,16 @@ $$
 
 We can use the following algorithm to simulate Dirichlet-Multinomial distributed data.
 
-- Set number of individuals $n$, number of total counts $m$ in every individual, proportions of $q$ categories $\boldsymbol\mu=(\mu_1,...,\mu_q)$, and dispersion parameter $\phi$.
+1. Set number of individuals $n$, number of total counts $m$ in every individual, proportions of $q$ categories $\boldsymbol\mu=(\mu_1,...,\mu_q)$, and dispersion parameter $\phi$.
 
-- Compute the Dirichlet's concentration parameters $\alpha_j=\mu_j \phi(1-\phi)$, $j=1,...,q$.
+2. Compute the Dirichlet's concentration parameters $\alpha_j=\mu_j \phi(1-\phi)$, $j=1,...,q$.
 
-- Use gamma distribution to generate Dirichlet's probabilities of one individual:
+3. Use gamma distribution to generate Dirichlet's probabilities of one individual:
+    * For $j$-th category in $i$-th individual, generate $c_{ij} \sim Gamma(\alpha_j, 1)$, $j=1,...,q$.
+    * Generate $\mu_{ij} = c_{ij} / \sum_{l=1}^q c_{ij}$.
+    * Repeat the two steps above for $i=1,...,n$ to generate data for $n$ individuals.
 
-  * For $j$-th category in $i$-th individual, generate $c_{ij} \sim Gamma(\alpha_j, 1)$, $j=1,...,q$.
-  * Generate $\mu_{ij} = c_{ij} / \sum_{l=1}^q c_{ij}$.
-  * Repeat the two steps above for $i=1,...,n$ to generate data for $n$ individuals.
-
-- Generate each individual's counts $\boldsymbol y_{i\cdot} \sim Multinomial(m; \mu_{i1},...,\mu_{iq})$
+4. Generate each individual's counts $\boldsymbol y_{i\cdot} \sim Multinomial(m; \mu_{i1},...,\mu_{iq})$.
  
 
 ### Simulations without covariates
