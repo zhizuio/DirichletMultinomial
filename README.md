@@ -10,7 +10,7 @@ The Dirichlet-Multinomial distribution is as follows.
 
 $$
     \boldsymbol y_{i \cdot} | \boldsymbol\mu,\phi  \sim \mathcal{DM}(\boldsymbol\mu,\phi ) 
-    = \binom{m}{(y_{i1},...,y_{iq})} \frac{\prod_{j=1}^q\prod_{k=1}^{y_{ik}}[\mu_j(1-\phi) + (k-1)\phi]}{\prod_{k=1}^m [1-\phi + (k-1)\phi]}.
+    = \binom{m}{(y_{i1},...,y_{iq})} \frac{\prod_{j=1}^q\prod_{k=1}^{y_{ij}}[\mu_j(1-\phi) + (k-1)\phi]}{\prod_{k=1}^m [1-\phi + (k-1)\phi]}.
 $$
 
 We can use the following algorithm to simulate Dirichlet-Multinomial distributed data.
