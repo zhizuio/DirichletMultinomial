@@ -1,6 +1,4 @@
 ---
-title: "Dirichlet-multinomial model"
-date: '2024-11-25'
 output: 
   html_document:
     keep_md: true
