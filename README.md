@@ -1,10 +1,3 @@
----
-output: 
-  html_document:
-    keep_md: true
-    self_contained: true
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Dirichlet-multinomial regression with covariates linked to mean
