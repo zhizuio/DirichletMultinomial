@@ -21,13 +21,13 @@ We can use the following algorithm to simulate Dirichlet-Multinomial distributed
 
 3. Use gamma distribution to generate Dirichlet's probabilities of one individual:
     * For $j$-th category in $i$-th individual, generate $c_{ij} \sim Gamma(\alpha_j, 1)$, $j=1,...,q$.
-    * Generate $\mu_{ij} = c_{ij} / \sum_{l=1}^q c_{ij}$.
+    * Generate $\mu_{ij} = c_{ij} / \sum_{j=1}^q c_{ij}$.
     * Repeat the two steps above for $i=1,...,n$ to generate data for $n$ individuals.
 
 4. Generate each individual's counts $\boldsymbol y_{i\cdot} \sim Multinomial(m; \mu_{i1},...,\mu_{iq})$.
  
 
-### Simulations without covariates
+### Sim1: Simulation without covariates
 
 ```r
 rm(list=ls())
@@ -45,7 +45,7 @@ Y1 <- simDM(n = 2, m = 100, mu = c(0.1, 0.5, 0.4), phi = 0.3)
 Y2 <- simDM(n = 2, m = c(100, 120), mu = c(0.1, 0.5, 0.4), phi = 0.3)
 ```
 
-### Simulations with covariates linked to the mean
+### Sim2: Simulation with covariates linked to the mean
 
 We can simualte Dirichlet-Multinomial distributed responses with their mean modeled by covariates $\mathbf X$.
 
@@ -57,6 +57,10 @@ where $g_\mu(\cdot)$ is the logit link functions.
 
 
 ```r
+rm(list=ls())
+# Load the function to simulate Dirichlet-Multinomial distributed data
+source("R/simDM.R")
+
 set.seed(123)
 n <- 100
 p <- 5
@@ -80,19 +84,48 @@ for (i in 1:n) {
   Y[i, ] <- simDM(n = 1, m = 100, mu = mu_all[i, ], phi = 0.1)
 }
 
-head(Y)
+# estimate coefficients and dispersion parameters by optimizing log-likelihood function
+source("R/target.R")
+opt <- nlminb(
+  start = c(rep(0.1, p * (q - 1)), 0.1),
+  objective = loglikfun,
+  lower = c(rep(-10, p * (q - 1)), 0.001),
+  upper = c(rep(10, p * (q - 1)), 0.999)
+)
+(phi.hat <- opt$par[length(opt$par)])
 ```
 ```
-##      [,1] [,2] [,3]
-## [1,]    9   36   55
-## [2,]    8   67   25
-## [3,]    1   37   62
-## [4,]   15   58   27
-## [5,]   31   31   38
-## [6,]    3   19   78
+## [1] 0.0928848
 ```
 
-### Simulations with covariates linked to both mean and dispersion
+```r
+# print out estimated coefficients
+(betas.hat <- matrix(opt$par[-length(opt$par)], nrow = p))
+```
+```
+##            [,1]       [,2]
+## [1,] -0.4615551 -0.1884095
+## [2,]  0.2017357  0.6039612
+## [3,] -0.6522207 -0.3699939
+## [4,]  0.8407859 -0.8557323
+## [5,]  0.7880258 -0.1038670
+```
+
+```r
+# print out true coefficients
+betas[, -q]
+```
+```
+##            [,1]        [,2]
+## [1,] -0.4527545 -0.04422637
+## [2,]  0.1877339  0.54738424
+## [3,] -0.6796304 -0.40919984
+## [4,]  0.7068605 -0.86874378
+## [5,]  0.6954783 -0.11893375
+```
+
+
+### Sim3: Simulation with covariates linked to both mean and dispersion
 
 We can simualte Dirichlet-Multinomial distributed responses with their mean modeled by covariates $\mathbf X$ and their dispersion modeled by covariates $\mathbf Z$ as follows.
 
