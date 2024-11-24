@@ -22,19 +22,20 @@ simDM <- function(n, m, mu, phi) {
   }
 
   # Calculate the Dirichlet concentration parameters
-  alpha0 <- 1 / phi - 1
-  alpha <- alpha0 * mu
+  # alpha0 <- 1 / phi - 1
+  # alpha <- mu * alpha0
+  alpha <- mu * (1 - phi) / phi
 
   # Use 'rgamma(1, shape = alpha[j], rate = 1)'
   # to generate n-individual Dirichlet proportions
-  Gam <- matrix(0, nrow = n, ncol = length(alpha))
+  g <- matrix(0, nrow = n, ncol = length(alpha))
   for (j in 1:length(alpha)) {
-    Gam[, j] <- rgamma(n, shape = alpha[j], rate = 1)
+    g[, j] <- rgamma(n, shape = alpha[j], rate = 1)
   }
-  if (any(rowSums(Gam) == 0)) {
+  if (any(rowSums(g) == 0)) {
     stop("The Dirichlet concentration parameters are all close to zero!")
   }
-  mu_ij <- Gam / rowSums(Gam)
+  mu_ij <- g / rowSums(g)
 
   Y <- matrix(0, nrow = n, ncol = length(alpha))
   for (i in 1:n) {

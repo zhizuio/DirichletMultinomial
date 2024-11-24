@@ -4,7 +4,7 @@
 .Rhistory
 .DS_Store
 
-test_build.R
+README.html
 test_ex.R
 results*
 
