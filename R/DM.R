@@ -201,31 +201,121 @@ DM.sim.all <- function(dataall,cores=1,trace=FALSE,initial_values)
   out
 }
 
+
+##################
+## various p 
+## fix n=100 and q=3
+##################
+
+setwd("/Users/caizhu/Desktop/DM")
 set.seed(123)
-n <- 50
+n <- 100
+ps <- c(4,5)
+q <- 3
+m <- 20
+phi <- 0.25
+
+
+
+Nsim <- 1000
+
+for (iii in 1:length(ps)) {
+  p <- ps[iii]
+  
+  beta <- matrix(c(rep(-2,p*ceiling((q-1)/2)),rep(2,p*(q-1-ceiling((q-1)/2)) )), nrow = p, ncol = (q-1) )
+  
+  initial_values <- c(rep(0.1,p*(q-1)),0.1)
+  datasim <- DM.sim.data(n=n,m=m,beta=beta,phi=phi,Nsim=Nsim,seed=123)
+  
+  system.time({result.DM <- DM.sim.all(dataall = datasim,cores = 5,
+                                       trace = TRUE,
+                                       initial_values=initial_values)})
+  
+  
+  filename <- paste("DM_n",n,"_p",p,"_q",q,"_m",m,"_phi",phi,"_no_gamma_Nsim",Nsim,".RData",sep ="")
+  save(result.DM=result.DM,datasim,file=filename)
+  
+}
+
+
+
+##################
+## various sample sizes n
+## fix p=2 and q=3
+##################
+
+setwd("/Users/caizhu/Desktop/DM")
+set.seed(123)
+ns <- c(20,50,100,500,1000)
 p <- 2
 q <- 3
-m=20
-phi=0.25
-
-ceiling((q-1)/2)
+m <- 20
+phi <- 0.25
 
 beta <- matrix(c(rep(-2,p*ceiling((q-1)/2)),rep(2,p*(q-1-ceiling((q-1)/2)) )), nrow = p, ncol = (q-1) )
 
 initial_values <- c(rep(0.1,p*(q-1)),0.1)
 
-Nsim <- 10
-datasim <- DM.sim.data(n=n,m=m,beta=beta,phi=phi,Nsim=Nsim,seed=123)
+Nsim <- 1000
 
-system.time({result.DM <- DM.sim.all(dataall = datasim,cores = 5,
-                                                trace = TRUE,
-                                     initial_values=initial_values)})
+for (iii in 1:length(ns)) {
+  n <- ns[iii]
+  datasim <- DM.sim.data(n=n,m=m,beta=beta,phi=phi,Nsim=Nsim,seed=123)
+  
+  system.time({result.DM <- DM.sim.all(dataall = datasim,cores = 5,
+                                       trace = TRUE,
+                                       initial_values=initial_values)})
+  
+  
+  filename <- paste("DM_n",n,"_p",p,"_q",q,"_m",m,"_phi",phi,"_no_gamma_Nsim",Nsim,".RData",sep ="")
+  save(result.DM=result.DM,datasim,file=filename)
+  
+}
 
 
-filename <- paste("DM_n",n,"_p",p,"_q",q,"_m",m,"_phi",phi,"_no_gamma_Nsim",Nsim,".RData",sep ="")
-save(result.DM=result.DM,datasim,file=filename)
+################
+## result 
+################
+
+Nsim=1000
+ns <- c(20,50,100,500,1000)
+p <- 2
+q <- 3
+m <- 20
+phi <- 0.25
+
+n <- ns[3]
+
+(filename <- paste("DM_n",n,"_p",p,"_q",q,"_m",m,"_phi",phi,"_no_gamma_Nsim",Nsim,".RData",sep ="") )
+load(file=filename)
+
+op <- par(mfrow=c(1,2))
+library(wesanderson)
+WAcol <- c("#F21A00","#78B7C5","#F2AD00")
+combinations <- expand.grid(1:p,1:(q-1))
+boxplot(result.DM[,1:(p*(q-1)+1)],col=WAcol[2],pch='.',axes=FALSE,
+        xlab = "Coefficients",ylab="Estimates",
+        main="DM Maximum likelihood")
+box()
+axis(2)
+axis(1,at=1:5,labels = c(paste("Beta",combinations$Var1,combinations$Var2,sep=""),"Phi"))
+segments(0.5,-2,2.5,-2,col="gold",lwd=3)
+segments(2.5,2,4.5,2,col = "gold",lwd=3)
+segments(4.5,0.25,5.5,0.25,col="gold",lwd=3)
+legend("topleft",paste("n=",n,",","p=",p,",","q=",q))
 
 
+boxplot(result.DM[,(p*(q-1)+2):ncol(result.DM)],col=WAcol[3],pch='.',axes=FALSE,
+        xlab = "Coefficients",ylab="Estimates",
+        main="MN Maximum likelihood")
+box()
+axis(2)
+axis(1,at=1:4,labels = paste("Beta",combinations$Var1,combinations$Var2,sep=""))
+segments(0.5,-2,2.5,-2,col="gold",lwd=3)
+segments(2.5,2,4.5,2,col = "gold",lwd=3)
+
+
+############################################################
 
 windows()
 par(mfrow=c(2,2))
